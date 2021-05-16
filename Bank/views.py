@@ -15,6 +15,22 @@ class UserRegisterMixin(generics.GenericAPIView,mixins.CreateModelMixin):
     def post(self,request):
         return self.create(request)
 
+class UserLoginApi(APIView):
+    def post(self,request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data.get("username")
+            password = serializer.validated_data.get("password")
+            # user=authenticate(request,username=username,password=password
+            user = User.objects.get(username=username)
+            if(user.username==username)&(user.password==password):
+                login(request,user)
+                token,created = Token.objects.get_or_create(user=user)
+                return Response({"token":token.key},status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
 class AccountCreationApi(generics.GenericAPIView,mixins.CreateModelMixin):
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -71,20 +87,6 @@ class DepositApi(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class UserLoginApi(APIView):
-    def post(self,request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            username = serializer.validated_data.get("username")
-            password = serializer.validated_data.get("password")
-            # user=authenticate(request,username=username,password=password
-            user = User.objects.get(username=username)
-            if(user.username==username)&(user.password==password):
-                login(request,user)
-                token,created = Token.objects.get_or_create(user=user)
-                return Response({"token":token.key},status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogoutApi(APIView):
     def get(self,request):
