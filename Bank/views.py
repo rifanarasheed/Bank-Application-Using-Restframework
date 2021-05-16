@@ -52,7 +52,7 @@ class BalanceApi(APIView):
     def get(self, request, account_num):
         account_num = AccountDetails.objects.get(account_num=account_num)
         if account_num:
-            return Response({"message":"Account Number :" + str(account_num.account_num) + "your Balance is" + str(account_num.balance)})
+            return Response({"message":"Account Number :" + str(account_num.account_num) + ", your Balance is" + str(account_num.balance)})
         else:
             return Response({"Warning : Invalid account Number" + str(account_num)})
 

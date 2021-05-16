@@ -11,7 +11,4 @@ urlpatterns = [
     path("deposit/<int:account_num>",DepositApi.as_view()),
     path("sendmoney",TransactionApi.as_view()),
     path("transaction/<int:account_num>",TransactionApi.as_view())
-
-
-
 ]

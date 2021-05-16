@@ -23,7 +23,7 @@ class TransactionSerializer(serializers.Serializer):
     account_num = serializers.CharField()
     to_acno = serializers.IntegerField()
     amount = serializers.IntegerField()
-    date = serializers.DateField()
+    date = serializers.DateField(required=False)
     def create(self, validated_data):
         account_num = validated_data["account_num"]
         acnt_obj = AccountDetails.objects.get(account_num = account_num)
